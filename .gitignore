@@ -9,3 +9,5 @@ javascript/**/package-lock.json
 ruby/.idea
 ruby/**/.exercism
 ruby/**/.solution.json
+ruby/Gemfile.lock
+ruby/hello-world/GETTING_STARTED.md
