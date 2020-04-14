@@ -9,13 +9,6 @@ const findColorValue = (desiredColor) => {
 }
 
 export const decodedValue = (colors) => {
-  let [colorOne, colorTwo, ...rest] = colors;
-  let colorDuo = [colorOne, colorTwo];
-
-  return colorDuo.reverse().reduce((sumOfColors, color, colorPowerOfTen) => {
-    let coefficient = findColorValue(color);
-    let colorNumericValue = coefficient * Math.pow(10, colorPowerOfTen);
-    sumOfColors += colorNumericValue;
-    return sumOfColors;
-  }, 0);
+  let [colorOne, colorTwo] = colors;
+  return findColorValue(colorOne) * Math.pow(10, 1) + findColorValue(colorTwo) * Math.pow(10, 0);
 };
