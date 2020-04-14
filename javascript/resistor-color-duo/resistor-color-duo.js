@@ -4,6 +4,18 @@
 //
 
 const COLORS = ['black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white'];
+const findColorValue = (desiredColor) => {
+  return COLORS.findIndex(color => color === desiredColor)
+}
+
 export const decodedValue = (colors) => {
-  return Number(colors.slice(0, 2).map((color) => COLORS.indexOf(color)).join(''));
+  let [colorOne, colorTwo, ...rest] = colors;
+  let colorDuo = [colorOne, colorTwo];
+
+  return colorDuo.reverse().reduce((sumOfColors, color, colorPowerOfTen) => {
+    let coefficient = findColorValue(color);
+    let colorNumericValue = coefficient * Math.pow(10, colorPowerOfTen);
+    sumOfColors += colorNumericValue;
+    return sumOfColors;
+  }, 0);
 };
