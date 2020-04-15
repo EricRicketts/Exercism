@@ -4,11 +4,10 @@
 //
 
 const COLORS = ['black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white'];
-const findColorValue = (desiredColor) => {
-  return COLORS.findIndex(color => color === desiredColor)
+const findColorValue = (color) => {
+  return COLORS.indexOf(color);
 }
 
-export const decodedValue = (colors) => {
-  let [colorOne, colorTwo] = colors;
-  return findColorValue(colorOne) * Math.pow(10, 1) + findColorValue(colorTwo) * Math.pow(10, 0);
+export const decodedValue = ([colorOne, colorTwo, ...rest]) => {
+  return findColorValue(colorOne) * 10 + findColorValue(colorTwo);
 };

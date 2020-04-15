@@ -11,3 +11,5 @@ ruby/**/.exercism
 ruby/**/.solution.json
 ruby/Gemfile.lock
 ruby/hello-world/GETTING_STARTED.md
+
+.DS_Store
