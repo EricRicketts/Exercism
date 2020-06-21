@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'resistor_color_duo'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 # Common test data version: 2.1.0 00dda3a
 class ResistorColorDuoTest < Minitest::Test

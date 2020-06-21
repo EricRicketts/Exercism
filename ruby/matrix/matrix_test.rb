@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'matrix'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 class MatrixTest < Minitest::Test
   def test_extract_a_row

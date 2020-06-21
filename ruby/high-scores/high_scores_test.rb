@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'high_scores'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 # Common test data version: 5.0.0 7dfb96c
 class HighScoresTest < Minitest::Test

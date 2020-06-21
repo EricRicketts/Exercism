@@ -4,7 +4,7 @@ begin
   require 'minitest/autorun'
   require 'minitest/reporters'
   require_relative 'hello_world'
-  MiniTest::Reporters.use!
+  Minitest::Reporters.use!
 rescue Gem::LoadError => e
   puts "\nMissing Dependency:\n#{e.backtrace.first} #{e.message}"
   puts 'Minitest 5.0 gem must be installed for the Ruby track.'

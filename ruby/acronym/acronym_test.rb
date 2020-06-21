@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'acronym'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 # Common test data version: 1.7.0 cacf1f1
 class AcronymTest < Minitest::Test

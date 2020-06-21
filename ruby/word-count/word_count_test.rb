@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'word_count'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 # Common test data version: 1.2.0 77623ec
 class WordCountTest < Minitest::Test

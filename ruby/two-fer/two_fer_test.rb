@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'two_fer'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 # Common test data version: 1.2.0 4fc1acb
 class TwoFerTest < Minitest::Test

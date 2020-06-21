@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/reporters'
 require_relative 'series'
-MiniTest::Reporters.use!
+Minitest::Reporters.use!
 
 class SeriesTest < Minitest::Test
   def test_simple_slices_of_one
