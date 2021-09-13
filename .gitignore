@@ -1,15 +1,2 @@
-javascript/.idea
-javascript/**/node_modules/
-javascript/**/.eslintrc
-javascript/**/.exercism
-javascript/**/babel.config.js
-javascript/**/package.json
-javascript/**/package-lock.json
-
-ruby/.idea
-ruby/**/.exercism
-ruby/**/.solution.json
-ruby/Gemfile.lock
-ruby/hello-world/GETTING_STARTED.md
-
+.*
 .DS_Store
