@@ -4,29 +4,34 @@ import java.util.List;
 public class LanguageList {
     private final List<String> languages = new ArrayList<>();
 
-    public boolean isEmpty() { return languages.isEmpty(); }
+    public boolean isEmpty() {
+        return languages.isEmpty();
+    }
 
     public void addLanguage(String language) {
-        throw new UnsupportedOperationException("Please implement the addLanguage() method");
+        languages.add(language);
     }
 
     public void removeLanguage(String language) {
-        throw new UnsupportedOperationException("Please implement the removeLanguage() method");
+        languages.remove(language);
     }
 
     public String firstLanguage() {
-        throw new UnsupportedOperationException("Please implement the firstLanguage() method");
+        return languages.get(0);
     }
 
     public int count() {
-        throw new UnsupportedOperationException("Please implement the count() method");
+        return languages.size();
     }
 
     public boolean containsLanguage(String language) {
-        throw new UnsupportedOperationException("Please implement the containsLanguage() method");
+        return languages.contains(language);
     }
 
     public boolean isExciting() {
-        throw new UnsupportedOperationException("Please implement the isExciting() method");
+        if (containsLanguage("Java") || containsLanguage("Kotlin"))
+            return true;
+        else
+            return false;
     }
 }
