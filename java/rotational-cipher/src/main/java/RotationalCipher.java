@@ -9,13 +9,7 @@ class RotationalCipher {
         String encodedData = "";
         int dataSize = data.length();
         for (int index = 0; index < dataSize; index++) {
-            String s = String.valueOf(data.charAt(index));
-            String lowerCaseCharacter = s.toLowerCase();
-            if (ALPHABET.contains(lowerCaseCharacter)) {
-                String encodedLetter = this.encodeLetter(lowerCaseCharacter);
-                s = this.upperCaseLetterOrNot(s, encodedLetter);
-            }
-            encodedData += s;
+            encodedData += this.applyCipherToCharacterOrNot(index, data);
         }
         return encodedData;
     }
@@ -25,6 +19,16 @@ class RotationalCipher {
         int shiftedPosition = (letterIndex + this.shiftKey) % ALPHABET.length();
 
         return String.valueOf(ALPHABET.charAt(shiftedPosition));
+    }
+
+    private String applyCipherToCharacterOrNot(int index, String data) {
+        String s = String.valueOf(data.charAt(index));
+        String lowerCaseCharacter = s.toLowerCase();
+        if (ALPHABET.contains(lowerCaseCharacter)) {
+            String encodedLetter = this.encodeLetter(lowerCaseCharacter);
+            s = this.upperCaseLetterOrNot(s, encodedLetter);
+        }
+        return s;
     }
 
     private String upperCaseLetterOrNot(String s, String encodedLetter) {
