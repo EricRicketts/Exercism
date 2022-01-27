@@ -12,18 +12,22 @@ class RotationalCipher {
             String s = String.valueOf(data.charAt(index));
             String lowerCaseCharacter = s.toLowerCase();
             if (ALPHABET.contains(lowerCaseCharacter)) {
-                int letterIndex = ALPHABET.indexOf(lowerCaseCharacter);
-                int shiftedPosition = (letterIndex + this.shiftKey) % ALPHABET.length();
-                String encodedLetter = String.valueOf(ALPHABET.charAt(shiftedPosition));
-                if (s == s.toUpperCase()) {
-                    s = encodedLetter.toUpperCase();
-                } else {
-                    s = encodedLetter;
-                }
+                String encodedLetter = this.encodeLetter(lowerCaseCharacter);
+                s = this.upperCaseLetterOrNot(s, encodedLetter);
             }
             encodedData += s;
         }
         return encodedData;
     }
 
+    private String encodeLetter(String lowerCaseLetter) {
+        int letterIndex = ALPHABET.indexOf(lowerCaseLetter);
+        int shiftedPosition = (letterIndex + this.shiftKey) % ALPHABET.length();
+
+        return String.valueOf(ALPHABET.charAt(shiftedPosition));
+    }
+
+    private String upperCaseLetterOrNot(String s, String encodedLetter) {
+        return (s == s.toUpperCase()) ? encodedLetter.toUpperCase() : encodedLetter;
+    }
 }
