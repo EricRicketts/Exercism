@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.stream.Collectors;
+
 class RotationalCipher {
     private final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     private int shiftKey;
@@ -6,32 +9,23 @@ class RotationalCipher {
     }
 
     String rotate(String data) {
-        String encodedData = "";
-        int dataSize = data.length();
-        for (int index = 0; index < dataSize; index++) {
-            encodedData += this.applyCipherToCharacterOrNot(index, data);
-        }
-        return encodedData;
+        return List.of(data.split("")).stream().map(s -> this.applyCipher(s)).collect(Collectors.joining());
     }
 
     private String encodeLetter(String lowerCaseLetter) {
         int letterIndex = ALPHABET.indexOf(lowerCaseLetter);
         int shiftedPosition = (letterIndex + this.shiftKey) % ALPHABET.length();
+        char cipherEncodedLetter = ALPHABET.charAt(shiftedPosition);
 
-        return String.valueOf(ALPHABET.charAt(shiftedPosition));
+        return String.valueOf(cipherEncodedLetter);
     }
 
-    private String applyCipherToCharacterOrNot(int index, String data) {
-        String s = String.valueOf(data.charAt(index));
-        String lowerCaseCharacter = s.toLowerCase();
+    private String applyCipher(String chr) {
+        String lowerCaseCharacter = chr.toLowerCase();
         if (ALPHABET.contains(lowerCaseCharacter)) {
             String encodedLetter = this.encodeLetter(lowerCaseCharacter);
-            s = this.upperCaseLetterOrNot(s, encodedLetter);
+            chr = (chr == chr.toUpperCase()) ? encodedLetter.toUpperCase() : encodedLetter;
         }
-        return s;
-    }
-
-    private String upperCaseLetterOrNot(String s, String encodedLetter) {
-        return (s == s.toUpperCase()) ? encodedLetter.toUpperCase() : encodedLetter;
+        return chr;
     }
 }
