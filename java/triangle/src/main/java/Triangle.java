@@ -1,38 +1,27 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class Triangle {
 
-    private List<Double> sides;
+    private int distinctSides;
     Triangle(double side1, double side2, double side3) throws TriangleException {
-        this.setSides(side1, side2, side3);
-        if (!this.isTriangleValid()) throw new TriangleException("Triangle is invalid.");
+        Double[] arrayOfSides = new Double[]{side1, side2, side3};
+        List<Double> sides = new ArrayList<>(Arrays.asList(arrayOfSides));
+        if (!this.isTriangleValid(sides)) throw new TriangleException("Triangle is invalid.");
+        distinctSides = (int)sides.stream().distinct().count();
     }
 
-    boolean isEquilateral() {
-        return sides.stream().allMatch(sides.get(0)::equals);
-    }
+    boolean isEquilateral() { return distinctSides == 1; }
 
-    boolean isIsosceles() {
-        return sides.stream().distinct().count() <= 2;
-    }
+    boolean isIsosceles() { return distinctSides <= 2; }
 
-    boolean isScalene() {
-        return sides.stream().distinct().count() == 3;
-    }
+    boolean isScalene() { return distinctSides == 3; }
 
-    private boolean isTriangleValid() {
-        List<Double> testSides = new ArrayList<>(this.sides);
-        double largestSide = testSides.stream().max((i, j) -> i.compareTo(j)).get();
-        testSides.remove(largestSide);
-        double sumOfTwoSmallerSides = testSides.stream().reduce((double) 0, (a, b) -> a + b);
+    private boolean isTriangleValid(List<Double> sides) {
+        List<Double> copyOfSides = new ArrayList<>(sides);
+        double largestSide = copyOfSides.stream().max((i, j) -> i.compareTo(j)).get();
+        copyOfSides.remove(largestSide);
+        double sumOfTwoSmallerSides = copyOfSides.stream().mapToDouble(Double::doubleValue).sum();
         return sumOfTwoSmallerSides > largestSide;
-    }
-
-    private void setSides(double side1, double side2, double side3 ) {
-        Double[] sidesArray = new Double[]{side1, side2, side3};
-        this.sides = List.of(sidesArray);
     }
 }

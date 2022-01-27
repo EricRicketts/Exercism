@@ -81,7 +81,7 @@ public class TriangleTest {
 
 //    @Ignore("Remove to run test")
     @Test
-    public void noSidesAreEqualCantBeIsoceles() throws TriangleException {
+    public void noSidesAreEqualCantBeIsosceles() throws TriangleException {
         Triangle triangle = new Triangle(2, 3, 4);
 
         assertFalse(triangle.isIsosceles());
