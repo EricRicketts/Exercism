@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 class Matrix {
 
@@ -19,7 +20,7 @@ class Matrix {
             for (int columnIndex = 0; columnIndex < rowSize; columnIndex++) {
                 int matrixValue = row.get(columnIndex);
                 if (this.isRowSaddlePoint(matrixValue, row)) {
-                    List<Integer> column = this.getColumn(columnIndex, numberOfRows);
+                    List<Integer> column = this.getColumn(columnIndex);
                     if (this.isColumnSaddlePoint(matrixValue, column)) {
                         saddlePoints.add(new MatrixCoordinate(rowIndex + 1, columnIndex + 1));
                     }
@@ -29,17 +30,12 @@ class Matrix {
         return saddlePoints;
     }
 
-    private List<Integer> getColumn(int desiredColumnIndex, int numberOfRows) {
+    private List<Integer> getColumn(int desiredColumnIndex) {
         List<Integer> column = new ArrayList<>();
-        for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-            List<Integer> row = this.matrix.get(rowIndex);
-            for (int columnIndex = 0; columnIndex < row.size(); columnIndex++) {
-                if (columnIndex == desiredColumnIndex) {
-                    int value = row.get(columnIndex);
-                    column.add(value);
-                    break;
-                }
-            }
+        for (List<Integer> row:this.matrix) {
+            IntStream.range(0, row.size()).forEach(index -> {
+                if (index == desiredColumnIndex) column.add(row.get(index));
+            });
         }
         return column;
     }
