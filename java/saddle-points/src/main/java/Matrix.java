@@ -31,13 +31,12 @@ class Matrix {
     }
 
     private List<Integer> getColumn(int desiredColumnIndex) {
-        List<Integer> column = new ArrayList<>();
-        for (List<Integer> row:this.matrix) {
+        return this.matrix.stream().reduce(new ArrayList<>(), (column, row) -> {
             IntStream.range(0, row.size()).forEach(index -> {
                 if (index == desiredColumnIndex) column.add(row.get(index));
             });
-        }
-        return column;
+            return column;
+        });
     }
 
     private boolean isColumnSaddlePoint(int value, List<Integer> column) {
