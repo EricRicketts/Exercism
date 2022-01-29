@@ -13,20 +13,18 @@ class Matrix {
 
     Set<MatrixCoordinate> getSaddlePoints() {
         Set<MatrixCoordinate> saddlePoints = new HashSet<>();
-        int numberOfRows = this.matrix.size();
-        for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+        IntStream.range(0, this.matrix.size()).forEach(rowIndex -> {
             List<Integer> row = this.matrix.get(rowIndex);
-            int rowSize = row.size();
-            for (int columnIndex = 0; columnIndex < rowSize; columnIndex++) {
-                int matrixValue = row.get(columnIndex);
+            IntStream.range(0, row.size()).forEach(columnIndex -> {
+                int matrixValue = this.matrix.get(rowIndex).get(columnIndex);
                 if (this.isRowSaddlePoint(matrixValue, row)) {
                     List<Integer> column = this.getColumn(columnIndex);
                     if (this.isColumnSaddlePoint(matrixValue, column)) {
                         saddlePoints.add(new MatrixCoordinate(rowIndex + 1, columnIndex + 1));
                     }
                 }
-            }
-        }
+            });
+        });
         return saddlePoints;
     }
 
