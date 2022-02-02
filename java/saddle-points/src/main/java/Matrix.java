@@ -6,14 +6,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-class Matrix {
+public class Matrix {
 
     private final List<List<Integer>> matrix;
     Matrix(List<List<Integer>> values) {
         this.matrix = values;
     }
 
-    Set<MatrixCoordinate> getSaddlePoints() {
+    public Set<MatrixCoordinate> getSaddlePoints() {
         Set<MatrixCoordinate> saddlePoints = new HashSet<>();
         int numberOfRows = this.matrix.size();
         for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
@@ -21,23 +21,16 @@ class Matrix {
             int numberOfElementsInRow = row.size();
             for (int columnIndex = 0; columnIndex < numberOfElementsInRow; columnIndex++) {
                 int matrixValue = this.matrix.get(rowIndex).get(columnIndex);
-                if (this.isRowSaddlePoint(matrixValue, row)) {
-                    Stream<Integer> column = this.getColumn(columnIndex);
-                    if (this.isColumnSaddlePoint(matrixValue, column)) {
-                        saddlePoints.add(new MatrixCoordinate(rowIndex + 1, columnIndex + 1));
-                    }
+                if (this.isRowSaddlePoint(matrixValue, row) && this.isColumnSaddlePoint(matrixValue, columnIndex)) {
+                    saddlePoints.add(new MatrixCoordinate(rowIndex + 1, columnIndex + 1));
                 }
             }
         }
         return saddlePoints;
     }
 
-    private Stream<Integer> getColumn(int desiredColumnIndex) {
-        return this.matrix.stream().map(row -> row.get(desiredColumnIndex));
-    }
-
-    private boolean isColumnSaddlePoint(int value, Stream<Integer> column) {
-        return column.allMatch(i -> value <= i);
+    private boolean isColumnSaddlePoint(int value, int columnIndex) {
+        return this.matrix.stream().map(row -> row.get(columnIndex)).allMatch(i -> value <= i);
     }
 
     private boolean isRowSaddlePoint(int value, List<Integer> row) {
