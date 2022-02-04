@@ -5,3 +5,11 @@ gradle/
 .idea/
 gradlew
 gradlew.*
+# WebStorm
+.idea/
+
+# npm
+node_modules/
+
+# Exercism
+.exercism/
