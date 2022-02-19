@@ -16,10 +16,9 @@ public class BinarySearch {
 
         int middleIndex = (int) Math.floor(this.list.size()/2.0),lowerIndex = 0, upperIndex = this.list.size() - 1;
         boolean valueFound = false;
+
         while (!valueFound) {
             int listValue = this.list.get(middleIndex);
-//            boolean valueNotPresent = (lowerIndex == middleIndex || upperIndex == middleIndex) &&
-//                    Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
             if (valueNotPresent(lowerIndex, upperIndex, middleIndex, listValue, value)) {
                 throw new ValueNotFoundException(GuardConditions.ERROR_MESSAGE);
             } else if (listValue == value) {
