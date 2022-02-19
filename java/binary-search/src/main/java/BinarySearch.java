@@ -12,8 +12,10 @@ public class BinarySearch {
 
     public int indexOf(int value) throws ValueNotFoundException {
         final String ERROR_MESSAGE = "Value not in array";
-        if (checkForEmptyList() || checkForOutOfBoundValues(value)) throw new ValueNotFoundException(ERROR_MESSAGE);
-        if (checkForListWithAllIdenticalEntries()) return 0;
+        if (GuardConditions.checkForEmptyList(this.list) || GuardConditions.checkForOutOfBoundValues(this.list, value)) {
+            throw new ValueNotFoundException(ERROR_MESSAGE);
+        }
+        if (GuardConditions.checkForListWithAllIdenticalEntries(this.list)) return 0;
 
         int middleIndex = (int) Math.floor(this.list.size()/2.0);
         int lowerIndex = 0;
@@ -41,21 +43,24 @@ public class BinarySearch {
         return middleIndex;
     }
 
-    private boolean checkForEmptyList() {
-        return this.list.size() == 0;
-    }
+    private static class GuardConditions {
 
-    private boolean checkForListWithAllIdenticalEntries() {
-        int firstValue = this.list.get(0);
-        Stream<Integer> listStream = this.list.stream();
-        return listStream.allMatch(value -> firstValue == value);
-    }
+        static boolean checkForEmptyList(List<Integer> list) {
+            return list.size() == 0;
+        }
 
-    private boolean checkForOutOfBoundValues(int value) {
-        int lastIndex = this.list.size() - 1;
-        int smallestValue = this.list.get(0);
-        int largestValue = this.list.get(lastIndex);
-        return value < smallestValue || value > largestValue;
+        static boolean checkForListWithAllIdenticalEntries(List<Integer> list) {
+            int firstValue = list.get(0);
+            Stream<Integer> listStream = list.stream();
+            return listStream.allMatch(value -> firstValue == value);
+        }
+
+        static boolean checkForOutOfBoundValues(List<Integer> list, int value) {
+            int lastIndex = list.size() - 1;
+            int smallestValue = list.get(0);
+            int largestValue = list.get(lastIndex);
+            return value < smallestValue || value > largestValue;
+        }
     }
 }
 
