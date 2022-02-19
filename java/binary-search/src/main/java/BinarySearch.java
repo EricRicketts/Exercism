@@ -10,35 +10,35 @@ public class BinarySearch {
         this.list = list;
     }
 
-    public int indexOf(int number) throws ValueNotFoundException {
+    public int indexOf(int value) throws ValueNotFoundException {
         final String ERROR_MESSAGE = "Value not in array";
-        if (checkForEmptyList() || checkForOutOfBoundValues(number)) throw new ValueNotFoundException(ERROR_MESSAGE);
+        if (checkForEmptyList() || checkForOutOfBoundValues(value)) throw new ValueNotFoundException(ERROR_MESSAGE);
         if (checkForListWithAllIdenticalEntries()) return 0;
 
-        int middle = (int) Math.floor(this.list.size()/2.0);
-        int lowerBound = 0;
-        int upperBound = this.list.size() - 1;
-        double preciseMiddle;
-        boolean numberFound = false;
-        while (!numberFound) {
-            int listNumber = this.list.get(middle);
-            boolean numberNotPresent = (lowerBound == middle || upperBound == middle) &&
-                    Math.abs(upperBound - lowerBound) == 1 && listNumber != number;
-            if (numberNotPresent) {
+        int middleIndex = (int) Math.floor(this.list.size()/2.0);
+        int lowerIndex = 0;
+        int upperIndex = this.list.size() - 1;
+        double preciseMiddleIndex;
+        boolean valueFound = false;
+        while (!valueFound) {
+            int listValue = this.list.get(middleIndex);
+            boolean valueNotPresent = (lowerIndex == middleIndex || upperIndex == middleIndex) &&
+                    Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
+            if (valueNotPresent) {
                 throw new ValueNotFoundException(ERROR_MESSAGE);
-            } else if (listNumber == number) {
-                numberFound = true;
-            } else if (number < listNumber) {
-                upperBound = middle;
-                preciseMiddle = (upperBound + lowerBound) / 2.0;
-                middle = (int) Math.floor(preciseMiddle);
+            } else if (listValue == value) {
+                valueFound = true;
+            } else if (value < listValue) {
+                upperIndex = middleIndex;
+                preciseMiddleIndex = (upperIndex + lowerIndex) / 2.0;
+                middleIndex = (int) Math.floor(preciseMiddleIndex);
             } else {
-                lowerBound = middle;
-                preciseMiddle = (upperBound + lowerBound) / 2.0;
-                middle = (int) Math.ceil(preciseMiddle);
+                lowerIndex = middleIndex;
+                preciseMiddleIndex = (upperIndex + lowerIndex) / 2.0;
+                middleIndex = (int) Math.ceil(preciseMiddleIndex);
             }
         }
-        return middle;
+        return middleIndex;
     }
 
     private boolean checkForEmptyList() {
