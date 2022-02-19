@@ -18,9 +18,9 @@ public class BinarySearch {
         boolean valueFound = false;
         while (!valueFound) {
             int listValue = this.list.get(middleIndex);
-            boolean valueNotPresent = (lowerIndex == middleIndex || upperIndex == middleIndex) &&
-                    Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
-            if (valueNotPresent) {
+//            boolean valueNotPresent = (lowerIndex == middleIndex || upperIndex == middleIndex) &&
+//                    Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
+            if (valueNotPresent(lowerIndex, upperIndex, middleIndex, listValue, value)) {
                 throw new ValueNotFoundException(GuardConditions.ERROR_MESSAGE);
             } else if (listValue == value) {
                 valueFound = true;
@@ -39,6 +39,12 @@ public class BinarySearch {
         return lowerHalf ? (int) Math.floor((upperIndex + lowerIndex) / 2.00) :
                 (int) Math.ceil((upperIndex + lowerIndex) / 2.00);
     }
+
+    private boolean valueNotPresent(int lowerIndex, int upperIndex, int middleIndex, int listValue, int value) {
+        return (lowerIndex == middleIndex || upperIndex == middleIndex) &&
+                Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
+    }
+
     private static class GuardConditions {
         static final String ERROR_MESSAGE = "Value not in array";
 
