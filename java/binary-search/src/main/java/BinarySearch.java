@@ -1,10 +1,8 @@
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.*;
-
 public class BinarySearch {
-    private List<Integer> list;
+    private final List<Integer> list;
 
     public BinarySearch(List<Integer> list) {
         this.list = list;
@@ -12,9 +10,9 @@ public class BinarySearch {
 
     public int indexOf(int value) throws ValueNotFoundException {
         final String ERROR_MESSAGE = "Value not in array";
-        if (GuardConditions.checkForEmptyList(this.list) || GuardConditions.checkForOutOfBoundValues(this.list, value)) {
-            throw new ValueNotFoundException(ERROR_MESSAGE);
-        }
+        boolean emptyListOrOutOfBoundsValues = GuardConditions.checkForEmptyList(this.list) ||
+                GuardConditions.checkForOutOfBoundValues(this.list, value);
+        if (emptyListOrOutOfBoundsValues) throw new ValueNotFoundException(ERROR_MESSAGE);
         if (GuardConditions.checkForListWithAllIdenticalEntries(this.list)) return 0;
 
         int middleIndex = (int) Math.floor(this.list.size()/2.0);
