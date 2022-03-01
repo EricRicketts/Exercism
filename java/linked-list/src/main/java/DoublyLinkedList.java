@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Node<T> {
-    private T nodeValue;
+    private final T nodeValue;
     private Node<T> nextNode;
     private Node<T> previousNode;
 
@@ -19,10 +19,13 @@ class Node<T> {
 
 public class DoublyLinkedList<T> {
     private final List<Node<T>> firstAndLastNodesList;
+    private final ListStatus listStatus;
 
     public DoublyLinkedList() {
         this.firstAndLastNodesList = new ArrayList<>(2);
+        this.listStatus = new ListStatus();
     }
+
     private Node<T> getFirstNode() { return this.firstAndLastNodesList.get(0); }
     private void setFirstNode(Node<T> node) { this.firstAndLastNodesList.set(0, node); }
     private Node<T> getLastNode() { return this.firstAndLastNodesList.get(1); }
@@ -65,28 +68,16 @@ public class DoublyLinkedList<T> {
         this.getFirstNode().setNextNode(this.getLastNode());
     }
 
-    private boolean listHasMoreThanTwoNodes() {
-        return this.sizeOfFirstAndLastNodesList() == 2 &&
-            this.getFirstNode().getNextNode() != this.getLastNode() &&
-            this.getLastNode().getPreviousNode() != this.getFirstNode();
-    }
-    private boolean listHasNoNodes() { return this.sizeOfFirstAndLastNodesList() == 0; }
-    private boolean listHasOneNode() { return this.sizeOfFirstAndLastNodesList() == 1; }
-    private boolean listHasTwoNodes() {
-        return this.sizeOfFirstAndLastNodesList() == 2 &&
-            this.getFirstNode().getNextNode() == this.getLastNode() &&
-            this.getLastNode().getPreviousNode() == this.getFirstNode();
-    }
     public T pop() {
         T lastNodeValue;
-        if (this.listHasMoreThanTwoNodes()) {
+        if (this.listStatus.listHasMoreThanTwoNodes()) {
             lastNodeValue = this.getLastNode().getNodeValue();
             Node<T> newLastNode = this.getLastNode().getPreviousNode();
             newLastNode.setNextNode(null);
             this.removeLastNodeFromFirstAndLastNodeList();
             this.pushNodeToFirstAndLastNodeList(newLastNode);
             this.setLastNode(newLastNode);
-        } else if (this.listHasTwoNodes()) {
+        } else if (this.listStatus.listHasTwoNodes()) {
             lastNodeValue = this.getLastNode().getNodeValue();
             this.getFirstNode().setNextNode(null);
             this.removeLastNodeFromFirstAndLastNodeList();
@@ -99,9 +90,9 @@ public class DoublyLinkedList<T> {
 
     public void push(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.listHasNoNodes()) {
+        if (this.listStatus.listHasNoNodes()) {
             this.insertFirstNode(newNode);
-        } else if (this.listHasOneNode()) {
+        } else if (this.listStatus.listHasOneNode()) {
             this.pushSecondNode(newNode);
         } else {
             this.pushNode(newNode);
@@ -110,13 +101,13 @@ public class DoublyLinkedList<T> {
 
     public T shift() {
         T firstNodeValue = this.getFirstNode().getNodeValue();
-        if (this.listHasMoreThanTwoNodes()) {
+        if (this.listStatus.listHasMoreThanTwoNodes()) {
             Node<T> newFirstNode = this.getFirstNode().getNextNode();
             newFirstNode.setPreviousNode(null);
             this.removeFirstNodeFromFirstAndLastNodeList();
             this.unshiftNodeToFirstAndLastNodeList(newFirstNode);
             this.setFirstNode(newFirstNode);
-        } else if (this.listHasTwoNodes()) {
+        } else if (this.listStatus.listHasTwoNodes()) {
             this.getLastNode().setPreviousNode(null);
             this.removeFirstNodeFromFirstAndLastNodeList();
         } else {
@@ -127,13 +118,30 @@ public class DoublyLinkedList<T> {
 
     public void unshift(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.listHasNoNodes()) {
+        if (this.listStatus.listHasNoNodes()) {
             this.insertFirstNode(newNode);
-        } else if (this.listHasOneNode()) {
+        } else if (this.listStatus.listHasOneNode()) {
             this.unshiftSecondNode(newNode);
         } else {
             this.unshiftNode(newNode);
         }
     }
 
+    class ListStatus {
+        private boolean listHasMoreThanTwoNodes() {
+            return sizeOfFirstAndLastNodesList() == 2 &&
+                    getFirstNode().getNextNode() != getLastNode() &&
+                    getLastNode().getPreviousNode() != getFirstNode();
+        }
+
+        private boolean listHasNoNodes() { return sizeOfFirstAndLastNodesList() == 0; }
+
+        private boolean listHasOneNode() { return sizeOfFirstAndLastNodesList() == 1; }
+
+        private boolean listHasTwoNodes() {
+            return sizeOfFirstAndLastNodesList() == 2 &&
+                    getFirstNode().getNextNode() == getLastNode() &&
+                    getLastNode().getPreviousNode() == getFirstNode();
+        }
+    }
 }
