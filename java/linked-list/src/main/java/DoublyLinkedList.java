@@ -30,11 +30,11 @@ public class DoublyLinkedList<T> {
     private void setLastNode(Node<T> node) { this.firstAndLastNodesList.set(1, node); }
 
     private int sizeOfFirstAndLastNodesList() { return this.firstAndLastNodesList.size(); }
-    private void addNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(node); }
+    private void pushNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(node); }
 
 
     private void insertFirstNode(Node<T> node) {
-        this.addNodeToFirstAndLastNodeList(node);
+        this.pushNodeToFirstAndLastNodeList(node);
     }
 
     private void pushNode(Node<T> node) {
@@ -44,7 +44,7 @@ public class DoublyLinkedList<T> {
     }
 
     private void pushSecondNode(Node<T> node) {
-        this.addNodeToFirstAndLastNodeList(node);
+        this.pushNodeToFirstAndLastNodeList(node);
         this.getFirstNode().setNextNode(node);
         this.setLastNode(node);
         this.getLastNode().setPreviousNode(this.getFirstNode());
@@ -82,7 +82,7 @@ public class DoublyLinkedList<T> {
             Node<T> newLastNode = this.getLastNode().getPreviousNode();
             newLastNode.setNextNode(null);
             this.firstAndLastNodesList.remove(1);
-            this.addNodeToFirstAndLastNodeList(newLastNode);
+            this.pushNodeToFirstAndLastNodeList(newLastNode);
             this.setLastNode(newLastNode);
         } else if (this.listHasTwoNodes()) {
             lastNodeValue = this.getLastNode().getNodeValue();
@@ -94,22 +94,6 @@ public class DoublyLinkedList<T> {
         }
         return lastNodeValue;
     }
-
-
-    /*
-        list size = 1
-            - return the value of the node
-            - remove the node from the list
-        list size = 2
-            - return the value of the first node
-            - remove the node from the list
-            - the last node previous should point to null
-        list size > 2
-            - return the value of the first node
-            - store the next value of the first node in a variable
-            - set the first node in the list to be the second value
-            - set the previous value to be of the first node to be null
-    */
 
     public void push(T t) {
         Node<T> newNode = new Node<>(t);
@@ -151,27 +135,3 @@ public class DoublyLinkedList<T> {
     }
 
 }
-/*
-    [1, 2]
-    1 - previous is null, next is 2
-    2 - previous is 1, next is null
-    [1, 2, 3]
-    1 - previous is null, next is 2, remains the same
-    2 - previous is 1, now next is set to 3
-    3 - previous is set to 2, nex is set to null
-    when 3 is added, 2 now needs to point to 3 as its next node
-    - push method
-        - the value comes in we do the following checks
-        - if both first and last nodes are null
-            - create a node
-            - put it as the first node
-            - set its previous and next as null
-        - if the fist node is not null and the second node is null
-            - create a node
-            - put it as the second node
-            - set it's previous to the first node
-            - the next of the first node is now the second node
-        - if neither first and second nodes are null
-            - create a node
-            -
-*/
