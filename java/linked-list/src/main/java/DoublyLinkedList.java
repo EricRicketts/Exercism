@@ -9,7 +9,6 @@ class Node<T> {
     Node(T value) { this.nodeValue = value; }
 
     T getNodeValue() { return this.nodeValue; }
-    void setNodeValue(T value) { this.nodeValue = value; }
 
     Node<T> getNextNode() { return this.nextNode; }
     void setNextNode(Node<T> nextNode) { this.nextNode = nextNode; }
@@ -33,6 +32,7 @@ public class DoublyLinkedList<T> {
     private void pushNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(node); }
     private void removeLastNodeFromFirstAndLastNodeList() { this.firstAndLastNodesList.remove(1); }
     private void removeFirstNodeFromFirstAndLastNodeList() { this.firstAndLastNodesList.remove(0); }
+    private void unshiftNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(0, node); }
 
 
     private void insertFirstNode(Node<T> node) {
@@ -59,7 +59,7 @@ public class DoublyLinkedList<T> {
     }
 
     private void unshiftSecondNode(Node<T> node) {
-        this.firstAndLastNodesList.add(0, node);
+        this.unshiftNodeToFirstAndLastNodeList(node);
         this.getLastNode().setPreviousNode(node);
         this.setFirstNode(node);
         this.getFirstNode().setNextNode(this.getLastNode());
@@ -114,7 +114,7 @@ public class DoublyLinkedList<T> {
             Node<T> newFirstNode = this.getFirstNode().getNextNode();
             newFirstNode.setPreviousNode(null);
             this.removeFirstNodeFromFirstAndLastNodeList();
-            this.firstAndLastNodesList.add(0, newFirstNode);
+            this.unshiftNodeToFirstAndLastNodeList(newFirstNode);
             this.setFirstNode(newFirstNode);
         } else if (this.listHasTwoNodes()) {
             this.getLastNode().setPreviousNode(null);
