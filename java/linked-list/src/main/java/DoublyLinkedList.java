@@ -18,130 +18,133 @@ class Node<T> {
 }
 
 public class DoublyLinkedList<T> {
-    private final List<Node<T>> firstAndLastNodesList;
-    private final ListStatus listStatus;
+    private final HeadAndTail headAndTail;
 
     public DoublyLinkedList() {
-        this.firstAndLastNodesList = new ArrayList<>(2);
-        this.listStatus = new ListStatus();
-    }
-
-    private Node<T> getFirstNode() { return this.firstAndLastNodesList.get(0); }
-    private void setFirstNode(Node<T> node) { this.firstAndLastNodesList.set(0, node); }
-    private Node<T> getLastNode() { return this.firstAndLastNodesList.get(1); }
-    private void setLastNode(Node<T> node) { this.firstAndLastNodesList.set(1, node); }
-
-    private int sizeOfFirstAndLastNodesList() { return this.firstAndLastNodesList.size(); }
-    private void pushNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(node); }
-    private void removeLastNodeFromFirstAndLastNodeList() { this.firstAndLastNodesList.remove(1); }
-    private void removeFirstNodeFromFirstAndLastNodeList() { this.firstAndLastNodesList.remove(0); }
-    private void unshiftNodeToFirstAndLastNodeList(Node<T> node) { this.firstAndLastNodesList.add(0, node); }
-
-
-    private void insertFirstNode(Node<T> node) {
-        this.pushNodeToFirstAndLastNodeList(node);
-    }
-
-    private void pushNode(Node<T> node) {
-        this.getLastNode().setNextNode(node);
-        node.setPreviousNode(this.getLastNode());
-        this.setLastNode(node);
-    }
-
-    private void pushSecondNode(Node<T> node) {
-        this.pushNodeToFirstAndLastNodeList(node);
-        this.getFirstNode().setNextNode(node);
-        this.setLastNode(node);
-        this.getLastNode().setPreviousNode(this.getFirstNode());
-    }
-
-    private void unshiftNode(Node<T> node) {
-       this.getFirstNode().setPreviousNode(node);
-       node.setNextNode(this.getFirstNode());
-       this.setFirstNode(node);
-    }
-
-    private void unshiftSecondNode(Node<T> node) {
-        this.unshiftNodeToFirstAndLastNodeList(node);
-        this.getLastNode().setPreviousNode(node);
-        this.setFirstNode(node);
-        this.getFirstNode().setNextNode(this.getLastNode());
+        this.headAndTail = new HeadAndTail();
     }
 
     public T pop() {
         T lastNodeValue;
-        if (this.listStatus.listHasMoreThanTwoNodes()) {
-            lastNodeValue = this.getLastNode().getNodeValue();
-            Node<T> newLastNode = this.getLastNode().getPreviousNode();
+        if (this.headAndTail.listHasMoreThanTwoNodes()) {
+            lastNodeValue = this.headAndTail.getTailNode().getNodeValue();
+            Node<T> newLastNode = this.headAndTail.getTailNode().getPreviousNode();
             newLastNode.setNextNode(null);
-            this.removeLastNodeFromFirstAndLastNodeList();
-            this.pushNodeToFirstAndLastNodeList(newLastNode);
-            this.setLastNode(newLastNode);
-        } else if (this.listStatus.listHasTwoNodes()) {
-            lastNodeValue = this.getLastNode().getNodeValue();
-            this.getFirstNode().setNextNode(null);
-            this.removeLastNodeFromFirstAndLastNodeList();
+            this.headAndTail.removeTailNodeFromHeadAndTailNodeList();
+            this.headAndTail.pushNodeOntoHeadAndTailNodeList(newLastNode);
+            this.headAndTail.setTailNode(newLastNode);
+        } else if (this.headAndTail.listOnlyHasHeadAndTailNodes()) {
+            lastNodeValue = this.headAndTail.getTailNode().getNodeValue();
+            this.headAndTail.getHeadNode().setNextNode(null);
+            this.headAndTail.removeTailNodeFromHeadAndTailNodeList();
         } else {
-            lastNodeValue = this.getFirstNode().getNodeValue();
-            this.removeFirstNodeFromFirstAndLastNodeList();
+            lastNodeValue = this.headAndTail.getHeadNode().getNodeValue();
+            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
         }
         return lastNodeValue;
     }
 
     public void push(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.listStatus.listHasNoNodes()) {
-            this.insertFirstNode(newNode);
-        } else if (this.listStatus.listHasOneNode()) {
-            this.pushSecondNode(newNode);
+        if (this.headAndTail.listHasNoHeadOrTail()) {
+            this.headAndTail.pushHeadNode(newNode);
+        } else if (this.headAndTail.listOnlyHasHeadNode()) {
+            this.headAndTail.pushTailNode(newNode);
         } else {
-            this.pushNode(newNode);
+            this.headAndTail.pushNode(newNode);
         }
     }
 
     public T shift() {
-        T firstNodeValue = this.getFirstNode().getNodeValue();
-        if (this.listStatus.listHasMoreThanTwoNodes()) {
-            Node<T> newFirstNode = this.getFirstNode().getNextNode();
+        T firstNodeValue = this.headAndTail.getHeadNode().getNodeValue();
+        if (this.headAndTail.listHasMoreThanTwoNodes()) {
+            Node<T> newFirstNode = this.headAndTail.getHeadNode().getNextNode();
             newFirstNode.setPreviousNode(null);
-            this.removeFirstNodeFromFirstAndLastNodeList();
-            this.unshiftNodeToFirstAndLastNodeList(newFirstNode);
-            this.setFirstNode(newFirstNode);
-        } else if (this.listStatus.listHasTwoNodes()) {
-            this.getLastNode().setPreviousNode(null);
-            this.removeFirstNodeFromFirstAndLastNodeList();
+            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
+            this.headAndTail.unshiftNodeOntoHeadAndTailNodeList(newFirstNode);
+            this.headAndTail.setHeadNode(newFirstNode);
+        } else if (this.headAndTail.listOnlyHasHeadAndTailNodes()) {
+            this.headAndTail.getTailNode().setPreviousNode(null);
+            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
         } else {
-            this.removeFirstNodeFromFirstAndLastNodeList();
+            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
         }
         return firstNodeValue;
     }
 
     public void unshift(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.listStatus.listHasNoNodes()) {
-            this.insertFirstNode(newNode);
-        } else if (this.listStatus.listHasOneNode()) {
-            this.unshiftSecondNode(newNode);
+        if (this.headAndTail.listHasNoHeadOrTail()) {
+            this.headAndTail.pushHeadNode(newNode);
+        } else if (this.headAndTail.listOnlyHasHeadNode()) {
+            this.headAndTail.unshiftTailNode(newNode);
         } else {
-            this.unshiftNode(newNode);
+            this.headAndTail.unshiftNode(newNode);
         }
     }
 
-    class ListStatus {
+    class HeadAndTail {
+        private final List<Node<T>> list;
+
+        HeadAndTail() { this.list = new ArrayList<Node<T>>(2); }
+
+        private Node<T> getHeadNode() { return this.list.get(0); }
+        private void setHeadNode(Node<T> node) { this.list.set(0, node); }
+        private Node<T> getTailNode() { return this.list.get(1); }
+        private void setTailNode(Node<T> node) { this.list.set(1, node); }
+
+        private void pushNodeOntoHeadAndTailNodeList(Node<T> node) { this.list.add(node); }
+        private void removeTailNodeFromHeadAndTailNodeList() { this.list.remove(1); }
+        private void removeHeadNodeFromHeadAndTailNodeList() { this.list.remove(0); }
+        private void unshiftNodeOntoHeadAndTailNodeList(Node<T> node) { this.list.add(0, node); }
+
+
+        private void pushHeadNode(Node<T> node) {
+            this.pushNodeOntoHeadAndTailNodeList(node);
+        }
+
+        private void pushNode(Node<T> node) {
+            this.getTailNode().setNextNode(node);
+            node.setPreviousNode(this.getTailNode());
+            this.setTailNode(node);
+        }
+
+        private void pushTailNode(Node<T> node) {
+            this.pushNodeOntoHeadAndTailNodeList(node);
+            this.getHeadNode().setNextNode(node);
+            this.setTailNode(node);
+            this.getTailNode().setPreviousNode(this.getHeadNode());
+        }
+
+        private void unshiftNode(Node<T> node) {
+            this.getHeadNode().setPreviousNode(node);
+            node.setNextNode(this.getHeadNode());
+            this.setHeadNode(node);
+        }
+
+        private void unshiftTailNode(Node<T> node) {
+            this.unshiftNodeOntoHeadAndTailNodeList(node);
+            this.getTailNode().setPreviousNode(node);
+            this.setHeadNode(node);
+            this.getHeadNode().setNextNode(this.getTailNode());
+        }
+
         private boolean listHasMoreThanTwoNodes() {
-            return sizeOfFirstAndLastNodesList() == 2 &&
-                    getFirstNode().getNextNode() != getLastNode() &&
-                    getLastNode().getPreviousNode() != getFirstNode();
+            return this.sizeHeadAndTailNodeList() == 2 &&
+                this.getHeadNode().getNextNode() != this.getTailNode() &&
+                this.getTailNode().getPreviousNode() != this.getHeadNode();
         }
 
-        private boolean listHasNoNodes() { return sizeOfFirstAndLastNodesList() == 0; }
+        private boolean listHasNoHeadOrTail() { return this.sizeHeadAndTailNodeList() == 0; }
 
-        private boolean listHasOneNode() { return sizeOfFirstAndLastNodesList() == 1; }
+        private boolean listOnlyHasHeadNode() { return this.sizeHeadAndTailNodeList() == 1; }
 
-        private boolean listHasTwoNodes() {
-            return sizeOfFirstAndLastNodesList() == 2 &&
-                    getFirstNode().getNextNode() == getLastNode() &&
-                    getLastNode().getPreviousNode() == getFirstNode();
+        private boolean listOnlyHasHeadAndTailNodes() {
+            return this.sizeHeadAndTailNodeList() == 2 &&
+                this.getHeadNode().getNextNode() == this.getTailNode() &&
+                this.getTailNode().getPreviousNode() == this.getHeadNode();
         }
+
+        private int sizeHeadAndTailNodeList() { return this.list.size(); }
     }
 }
