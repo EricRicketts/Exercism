@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 class Node<T> {
     private final T nodeValue;
     private Node<T> nextNode;
@@ -18,152 +15,83 @@ class Node<T> {
 }
 
 public class DoublyLinkedList<T> {
-    private final HeadAndTail headAndTail;
+    private Node<T> head;
+    private Node<T> tail;
 
-    public DoublyLinkedList() {
-        this.headAndTail = new HeadAndTail();
+    private Node<T> getHead() { return head; }
+    private Node<T> getTail() { return tail; }
+    void setHead(Node<T> node) { this.head = node; }
+    void setTail(Node<T> node) { this.tail = node; }
+    private boolean listHasNoHead() { return this.head == null; }
+    private boolean listHasNoTail() { return this.head != null && this.tail == null; }
+    private boolean listHasOnlyHeadAndTail() {
+        return this.head.getNextNode() == this.tail && this.tail.getPreviousNode() == this.head;
     }
 
+
     public T pop() {
-        T tailNodeValue = this.getTailNodeValue();
-        if (this.headAndTail.listHasMoreThanHeadOrTailNodes()) {
-            this.popFromListWithMoreThanHeadOrTailNodes();
-        } else if (this.headAndTail.listHasOnlyHeadAndTailNodes()) {
-            this.popFromListWhichOnlyHasHeadAndTailNodes();
+        T nodeValue;
+        if (this.listHasNoTail()) {
+            nodeValue = this.getHead().getNodeValue();
+            this.setHead(null);
+        } else if (this.listHasOnlyHeadAndTail()) {
+            nodeValue = this.getTail().getNodeValue();
+            this.getHead().setNextNode(null);
+            this.setTail(null);
         } else {
-            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
+            nodeValue = this.getTail().getNodeValue();
+            this.setTail(this.getTail().getPreviousNode());
+            this.getTail().setNextNode(null);
         }
-        return tailNodeValue;
+        return nodeValue;
     }
 
     public void push(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.headAndTail.listHasNoHeadOrTail()) {
-            this.headAndTail.pushHeadNode(newNode);
-        } else if (this.headAndTail.listHasOnlyHeadNode()) {
-            this.headAndTail.pushTailNode(newNode);
+        if (this.listHasNoHead()) {
+            this.setHead(newNode);
+        } else if (this.listHasNoTail()) {
+            this.getHead().setNextNode(newNode);
+            newNode.setPreviousNode(this.getHead());
+            this.setTail(newNode);
         } else {
-            this.headAndTail.pushNode(newNode);
+            this.getTail().setNextNode(newNode);
+            newNode.setPreviousNode(this.getTail());
+            this.setTail(newNode);
         }
     }
 
     public T shift() {
-        T headNodeValue = this.headAndTail.getHeadNode().getNodeValue();
-        if (this.headAndTail.listHasMoreThanHeadOrTailNodes()) {
-            this.shiftFromListWithMoreThanHeadOrTailNodes();
-        } else if (this.headAndTail.listHasOnlyHeadAndTailNodes()) {
-            this.shiftFromListWhichOnlyHasHeadAndTailNodes();
+        T nodeValue;
+        if (this.listHasNoTail()) {
+            nodeValue = this.getHead().getNodeValue();
+            this.setHead(null);
+        } else if (this.listHasOnlyHeadAndTail()) {
+            nodeValue = this.getHead().getNodeValue();
+            this.setHead(this.getTail());
+            this.getHead().setNextNode(null);
+            this.setTail(null);
         } else {
-            this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
+            nodeValue = this.getHead().getNodeValue();
+            this.setHead(this.getHead().getNextNode());
+            this.getHead().setPreviousNode(null);
         }
-        return headNodeValue;
+        return nodeValue;
     }
 
     public void unshift(T t) {
         Node<T> newNode = new Node<>(t);
-        if (this.headAndTail.listHasNoHeadOrTail()) {
-            this.headAndTail.pushHeadNode(newNode);
-        } else if (this.headAndTail.listHasOnlyHeadNode()) {
-            this.headAndTail.unshiftTailNode(newNode);
+        if (this.listHasNoHead()) {
+            this.setHead(newNode);
+        } else if (this.listHasNoTail()) {
+            this.setTail(this.getHead());
+            this.setHead(newNode);
+            this.getTail().setPreviousNode(this.getHead());
+            this.getHead().setNextNode(this.getTail());
         } else {
-            this.headAndTail.unshiftNode(newNode);
+            this.getHead().setPreviousNode(newNode);
+            newNode.setNextNode(this.getHead());
+            this.setHead(newNode);
         }
-    }
-
-    private T getTailNodeValue() {
-        return this.headAndTail.sizeHeadAndTailNodeList() >= 2 ?
-            this.headAndTail.getTailNode().getNodeValue() :
-            this.headAndTail.getHeadNode().getNodeValue();
-    }
-
-    private void popFromListWhichOnlyHasHeadAndTailNodes() {
-        this.headAndTail.getHeadNode().setNextNode(null);
-        this.headAndTail.removeTailNodeFromHeadAndTailNodeList();
-    }
-
-    private void popFromListWithMoreThanHeadOrTailNodes() {
-        Node<T> newTailNode = this.headAndTail.getTailNode().getPreviousNode();
-        newTailNode.setNextNode(null);
-        this.headAndTail.removeTailNodeFromHeadAndTailNodeList();
-        this.headAndTail.pushNodeOntoHeadAndTailNodeList(newTailNode);
-        this.headAndTail.setTailNode(newTailNode);
-    }
-
-    private void shiftFromListWhichOnlyHasHeadAndTailNodes() {
-        this.headAndTail.getTailNode().setPreviousNode(null);
-        this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
-    }
-
-    private void shiftFromListWithMoreThanHeadOrTailNodes() {
-        Node<T> newFirstNode = this.headAndTail.getHeadNode().getNextNode();
-        newFirstNode.setPreviousNode(null);
-        this.headAndTail.removeHeadNodeFromHeadAndTailNodeList();
-        this.headAndTail.unshiftNodeOntoHeadAndTailNodeList(newFirstNode);
-        this.headAndTail.setHeadNode(newFirstNode);
-    }
-
-
-    class HeadAndTail {
-        private final List<Node<T>> list;
-
-        HeadAndTail() { this.list = new ArrayList<Node<T>>(2); }
-
-        private Node<T> getHeadNode() { return this.list.get(0); }
-        private void setHeadNode(Node<T> node) { this.list.set(0, node); }
-        private Node<T> getTailNode() { return this.list.get(1); }
-        private void setTailNode(Node<T> node) { this.list.set(1, node); }
-
-        private void pushNodeOntoHeadAndTailNodeList(Node<T> node) { this.list.add(node); }
-        private void removeTailNodeFromHeadAndTailNodeList() { this.list.remove(1); }
-        private void removeHeadNodeFromHeadAndTailNodeList() { this.list.remove(0); }
-        private void unshiftNodeOntoHeadAndTailNodeList(Node<T> node) { this.list.add(0, node); }
-
-        private void pushHeadNode(Node<T> node) {
-            this.pushNodeOntoHeadAndTailNodeList(node);
-        }
-
-        private void pushNode(Node<T> node) {
-            this.getTailNode().setNextNode(node);
-            node.setPreviousNode(this.getTailNode());
-            this.setTailNode(node);
-        }
-
-        private void pushTailNode(Node<T> node) {
-            this.pushNodeOntoHeadAndTailNodeList(node);
-            this.getHeadNode().setNextNode(node);
-            this.setTailNode(node);
-            this.getTailNode().setPreviousNode(this.getHeadNode());
-        }
-
-        private void unshiftNode(Node<T> node) {
-            this.getHeadNode().setPreviousNode(node);
-            node.setNextNode(this.getHeadNode());
-            this.setHeadNode(node);
-        }
-
-        private void unshiftTailNode(Node<T> node) {
-            this.unshiftNodeOntoHeadAndTailNodeList(node);
-            this.getTailNode().setPreviousNode(node);
-            this.setHeadNode(node);
-            this.getHeadNode().setNextNode(this.getTailNode());
-        }
-
-        private boolean listHasMoreThanHeadOrTailNodes() {
-            return this.sizeHeadAndTailNodeList() == 2 &&
-                this.getHeadNode().getNextNode() != this.getTailNode() &&
-                this.getTailNode().getPreviousNode() != this.getHeadNode();
-        }
-
-        private boolean listHasNoHeadOrTail() { return this.sizeHeadAndTailNodeList() == 0; }
-
-        private boolean listHasOnlyHeadNode() { return this.sizeHeadAndTailNodeList() == 1; }
-
-        private boolean listHasOnlyHeadAndTailNodes() {
-            return this.sizeHeadAndTailNodeList() == 2 &&
-                this.getHeadNode().getNextNode() == this.getTailNode() &&
-                this.getTailNode().getPreviousNode() == this.getHeadNode();
-        }
-
-        private int sizeHeadAndTailNodeList() { return this.list.size(); }
     }
 }
