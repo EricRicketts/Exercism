@@ -4,19 +4,21 @@ import java.util.stream.Stream;
 public class BinarySearch {
     static final String ERROR_MESSAGE = "Value not in array";
     private final List<Integer> list;
+    private final int listSize;
 
     public BinarySearch(List<Integer> list) {
         this.list = list;
+        this.listSize = this.list.size();
     }
 
     public int indexOf(int value) throws ValueNotFoundException {
-        if (this.checkForEmptyList(this.list) || this.checkForOutOfBoundValues(this.list, value)) {
+        if (this.listSize == 0) {
             throw new ValueNotFoundException(ERROR_MESSAGE);
         }
 
-        int middleIndex = this.list.size()/2;
+        int middleIndex = this.listSize / 2;
         int lowerIndex = 0;
-        int upperIndex = this.list.size() - 1;
+        int upperIndex = this.listSize - 1;
 
         boolean valueFound = false;
 
@@ -28,29 +30,21 @@ public class BinarySearch {
                 valueFound = true;
             } else if (value < listValue) {
                 upperIndex = middleIndex;
-                middleIndex = calculateMiddleIndex(upperIndex, lowerIndex, true);
+                middleIndex = this.calculateMiddleIndexLowerHalf(upperIndex, lowerIndex);
             } else {
                 lowerIndex = middleIndex;
-                middleIndex = calculateMiddleIndex(upperIndex, lowerIndex, false);
+                middleIndex = this.calculateMiddleIndexUpperHalf(upperIndex, lowerIndex);
             }
         }
         return middleIndex;
     }
 
-    private int calculateMiddleIndex(int upperIndex, int lowerIndex, boolean lowerHalf) {
-        return lowerHalf ? (int) Math.floor((upperIndex + lowerIndex) / 2.00) :
-                (int) Math.ceil((upperIndex + lowerIndex) / 2.00);
+    private int calculateMiddleIndexLowerHalf(int upperBound, int lowerBound) {
+        return (upperBound + lowerBound) / 2;
     }
 
-    private boolean checkForEmptyList(List<Integer> list) {
-        return list.size() == 0;
-    }
-
-    private boolean checkForOutOfBoundValues(List<Integer> list, int value) {
-        int lastIndex = list.size() - 1;
-        int smallestValue = list.get(0);
-        int largestValue = list.get(lastIndex);
-        return value < smallestValue || value > largestValue;
+    private int calculateMiddleIndexUpperHalf(int upperBound, int lowerBound) {
+        return (upperBound + lowerBound) / 2 + 1;
     }
 
     private boolean valueNotPresent(int lowerIndex, int upperIndex, int middleIndex, int listValue, int value) {
