@@ -24,7 +24,7 @@ public class BinarySearch {
 
         while (!valueFound) {
             int listValue = this.list.get(middleIndex);
-            if (valueNotPresent(lowerIndex, upperIndex, middleIndex, listValue, value)) {
+            if (valueNotPresent(lowerIndex, upperIndex, listValue, value)) {
                 throw new ValueNotFoundException(ERROR_MESSAGE);
             } else if (listValue == value) {
                 valueFound = true;
@@ -47,8 +47,7 @@ public class BinarySearch {
         return (upperBound + lowerBound) / 2 + 1;
     }
 
-    private boolean valueNotPresent(int lowerIndex, int upperIndex, int middleIndex, int listValue, int value) {
-        return (lowerIndex == middleIndex || upperIndex == middleIndex) &&
-                Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
+    private boolean valueNotPresent(int lowerIndex, int upperIndex, int listValue, int value) {
+        return Math.abs(upperIndex - lowerIndex) == 1 && listValue != value;
     }
 }
