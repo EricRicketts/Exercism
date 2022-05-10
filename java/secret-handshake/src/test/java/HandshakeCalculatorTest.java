@@ -7,6 +7,7 @@ public class HandshakeCalculatorTest {
 
     private final HandshakeCalculator handshakeCalculator = new HandshakeCalculator();
 
+//    @Ignore
     @Test
     public void testThatInput1YieldsAWink() {
         assertThat(handshakeCalculator.calculateHandshake(1)).containsExactly(Signal.WINK);
