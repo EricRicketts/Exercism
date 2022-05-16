@@ -15,10 +15,10 @@ class HandshakeCalculator {
         boolean bitPresent;
         for (Integer bit:binaryArray) {
             bitPresent = (bit & number) == bit;
-            if (bit != 16) {
-                if (bitPresent) handShake.add(signalMap.get(bit));
-            } else {
-                if (bitPresent) Collections.reverse(handShake);
+            if (bit != 16 && bitPresent) {
+                handShake.add(signalMap.get(bit));
+            } else if (bitPresent) {
+                Collections.reverse(handShake);
             }
         }
 
